@@ -1,5 +1,5 @@
-base: /New_Curriculum_Template/
-description: A simple template for new curriculum
+base: /Java-Levels/
+description: All of the Java Levels
 head:
 - - meta
   - content: '#F37121'
@@ -27,17 +27,85 @@ themeConfig:
     text: The LEAGUE
   repo: ''
   sidebar:
-  - path: /intro
-    title: Introduction
   - children:
-    - path: /lessons/lesson1/assignment_a/
-      title: Assignment A
+    - path: /lessons/Module0/01_methods_1_houses/
+      title: 01 Methods 1 Houses
+    - path: /lessons/Module0/01_methods_2_spinning_record/
+      title: 01 Methods 2 Spinning Record
+    - path: /lessons/Module0/01_methods_3_rain_game/
+      title: 01 Methods 3 Rain Game
+    - path: /lessons/Module0/01_methods_4_magic_worms/
+      title: 01 Methods 4 Magic Worms
+    - path: /lessons/Module0/01_methods_5_FlappyBird/
+      title: 01 Methods 5 Flappybird
+    - path: /lessons/Module0/03_gui_with_help_1_my_first_swing_gui/
+      title: 03 Gui With Help 1 My First Swing Gui
+    - path: /lessons/Module0/03_gui_with_help_2_photo_quiz/
+      title: 03 Gui With Help 2 Photo Quiz
+    - path: /lessons/Module0/03_gui_with_help_3_drum_kit/
+      title: 03 Gui With Help 3 Drum Kit
+    - path: /lessons/Module0/03_gui_with_help_4_body_part_quiz/
+      title: 03 Gui With Help 4 Body Part Quiz
+    - path: /lessons/Module0/03_gui_with_help_5_duelling_buttons/
+      title: 03 Gui With Help 5 Duelling Buttons
+    - path: /lessons/Module0/04_gui_from_scratch_1_fortune_cookie/
+      title: 04 Gui From Scratch 1 Fortune Cookie
+    - path: /lessons/Module0/04_gui_from_scratch_2_jack_in_the_box/
+      title: 04 Gui From Scratch 2 Jack In The Box
+    - path: /lessons/Module0/04_gui_from_scratch_3_sound_effects_machine/
+      title: 04 Gui From Scratch 3 Sound Effects Machine
+    - path: /lessons/Module0/04_gui_from_scratch_4_cuteness_tv/
+      title: 04 Gui From Scratch 4 Cuteness Tv
     collapsable: false
-    title: Getting Started
+    title: Module0
   - children:
-    - path: /lessons/lesson2/assignment_b/
-      title: Assignment B
+    - path: /lessons/Module1/06_vault/
+      title: 06 Vault
+    - path: /lessons/Module1/07_duck/
+      title: 07 Duck
+    - path: /lessons/Module1/11_binary_converter/
+      title: 11 Binary Converter
     collapsable: false
-    path: /lessons/lesson2/
-    title: Lesson 2
-title: Example Curriculum Site
+    title: Module1
+  - children:
+    - path: /lessons/Module2/99_extra_04_tea_party/
+      title: 99 Extra 04 Tea Party
+    - path: /lessons/Module2/99_extra_04_unit_tests/
+      title: 99 Extra 04 Unit Tests
+    collapsable: false
+    title: Module2
+  - children:
+    - path: /lessons/Module3/01_intro_to_static/
+      title: 01 Intro To Static
+    - path: /lessons/Module3/04_netflix/
+      title: 04 Netflix
+    - path: /lessons/Module3/06_frogger/
+      title: 06 Frogger
+    - path: /lessons/Module3/99_extra_04_gridworld/
+      title: 99 Extra 04 Gridworld
+    collapsable: false
+    title: Module3
+  - children:
+    - path: /lessons/Module4/01_chuckle_clicker/
+      title: 01 Chuckle Clicker
+    - path: /lessons/Module4/02_jeopardy/
+      title: 02 Jeopardy
+    - path: /lessons/Module4/03_typing_tutor/
+      title: 03 Typing Tutor
+    - path: /lessons/Module4/06_calculator/
+      title: 06 Calculator
+    - path: /lessons/Module4/07_tv_show_episode_info/
+      title: 07 Tv Show Episode Info
+    - path: /lessons/Module4/08_pig_latin/
+      title: 08 Pig Latin
+    - path: /lessons/Module4/09_whack_a_mole/
+      title: 09 Whack A Mole
+    - path: /lessons/Module4/10_slot_machine/
+      title: 10 Slot Machine
+    - path: /lessons/Module4/12_online_practice_quiz/
+      title: 12 Online Practice Quiz
+    - path: /lessons/Module4/99_extra_01_nasty_surprise/
+      title: 99 Extra 01 Nasty Surprise
+    collapsable: false
+    title: Module4
+title: Java Levels

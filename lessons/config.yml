@@ -1,6 +1,5 @@
-base: /HourofMicrobit/
-description: Hour of Microbit
-title: Hour of Microbit
+base: /Java-Levels/
+
 
 head:
 - - meta

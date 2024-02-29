@@ -1,24 +1,59 @@
-title: Example Curriculum Site
-description: A simple template for new curriculum
-pages:
-  - index.md
-  - about.md
-  - intro.md
-resources:
-  - flag.png
-  - word-logo.png
-  - microbit.png
-sidebar:
-  - path: /intro
-    title: Introduction
+
+title: Java Levels
+description: All of the Java Levels
+pages: []
+resources: []
+sidebar: []
 lessons:
-  
-  lesson1:
-    title: Getting Started # neet a title b/c there is no index.md
+  Module0:
+    title: Module0
     assignments:
-     - lesson1/assignment_a.md
-  lesson2:
-    # title: No Title # Don't need title, has index.md
+    - Level1/Module0/01_methods_1_houses
+    - Level1/Module0/01_methods_2_spinning_record
+    - Level1/Module0/01_methods_3_rain_game
+    - Level1/Module0/01_methods_4_magic_worms
+    - Level1/Module0/01_methods_5_FlappyBird
+    - Level1/Module0/03_gui_with_help_1_my_first_swing_gui
+    - Level1/Module0/03_gui_with_help_2_photo_quiz
+    - Level1/Module0/03_gui_with_help_3_drum_kit
+    - Level1/Module0/03_gui_with_help_4_body_part_quiz
+    - Level1/Module0/03_gui_with_help_5_duelling_buttons
+    - Level1/Module0/04_gui_from_scratch_1_fortune_cookie
+    - Level1/Module0/04_gui_from_scratch_2_jack_in_the_box
+    - Level1/Module0/04_gui_from_scratch_3_sound_effects_machine
+    - Level1/Module0/04_gui_from_scratch_4_cuteness_tv
+
+  Module1:
+    title: Module1
     assignments:
-    - lesson2/assignment_b.md
+    - Level1/Module1/06_vault
+    - Level1/Module1/07_duck
+    - Level1/Module1/11_binary_converter
+  Module2:
+    title: Module2
+    assignments:
+    - Level1/Module2/99_extra_04_tea_party
+    - Level1/Module2/99_extra_04_unit_tests
+  Module3:
+    assignments:
+    - Level1/Module3/01_intro_to_static
+    - Level1/Module3/04_netflix
+    - Level1/Module3/06_frogger
+    - Level1/Module3/99_extra_04_gridworld
+    title: Module3
+  Module4:
+    title: Module4
+    assignments:
+    - Level1/Module4/01_chuckle_clicker
+    - Level1/Module4/02_jeopardy
+    - Level1/Module4/03_typing_tutor
+    - Level1/Module4/06_calculator
+    - Level1/Module4/07_tv_show_episode_info
+    - Level1/Module4/08_pig_latin
+    - Level1/Module4/09_whack_a_mole
+    - Level1/Module4/10_slot_machine
+    - Level1/Module4/12_online_practice_quiz
+    - Level1/Module4/99_extra_01_nasty_surprise
+    
+
 

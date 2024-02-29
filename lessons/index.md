@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage:  /assets/word-logo.png
-tagline: Hour of Microbit
+tagline: All League Java Levels
 actionText: Get Started!
 actionLink: /intro
 
