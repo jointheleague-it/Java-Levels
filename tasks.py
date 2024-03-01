@@ -1,148 +1,83 @@
-
-
 from invoke import task
 from pathlib import Path 
 from textwrap import dedent
 import shutil 
 import yaml
+import re
+import html
 
 repo_root = Path(__file__).parent
 
 
-def get_lmla(dir_=None):
-    """Get level, module, lesson, assignment from a directory"""
-    if dir_ is None:
-        p = Path('.')
-    else:
-        p = Path(dir_)
+def walk_asgn(root):
 
-    parts = str(p.absolute()).split('/')
+    root = Path(root)
 
-    l = None
-    m = None
-    ls = None
-    a = None
+    for f in root.glob('**/.meta'):
+        yield f
 
 
-    # The lesson is the first directory after 'src',
-    # and the assignment is the directory after the lesson.
-
-    for i, part in enumerate(parts):
-        if part.startswith("Level"):
-            l = part
-        if part.startswith("Module"):
-            m = part
-        if part == "src":
-            try:
-                # The lesson must be a directory
-                t = Path('/'.join(parts[:i + 1]))
-                if t.is_dir():
-                    ls = parts[i+1]
-            except IndexError:
-                pass
-        if ls and parts[i] == ls:
-            # The assignment must be a directory
-            try:
-                t = Path('/'.join(parts[:i+1]))
-                if t.is_dir():
-                    a = parts[i+1]
-            except IndexError:
-                pass
-
-    return l, m, ls, a
-
-
-@task
-def make_lesson_dirs(ctx, level, root):
+def compile_meta(level, root):
 
     root = Path(root)
 
     ld =  repo_root / 'lessons'
 
+
     print("Processing Level", level)
 
 
-    for f in root.glob('**/.web'):
+    lessons = {}
+
+    for mf in walk_asgn(root):
+
+        meta = yaml.safe_load(mf.read_text())
+
+        if meta['level'].lower() == level.lower():
+
+            m, l, a = meta['module'], meta['lesson'], meta['assignment']
+
+            if m not in lessons:
+                lessons[m] = {}
 
 
-        f = f.parent
+            if l not in lessons[m]:
+                lessons[m][l]= {}
 
-        try:
-            l,m,ls,a = get_lmla(f)
-        except Exception as e:
-            print("ERROR (lmla) ", f, e)
-            continue
+            lessons[m][l][a]= meta
 
-        if l != level:
-            continue
+    return lessons
 
+def make_text(ass):
 
-        if a is None and ls is None:
-            # Module level
-            print("No assignment ", f)
-            continue
+    text = ''
 
-        elif a is None and ls is not None:
-            # missing one level of less / assignment
-            ls = ls.strip('_')
-            a = ls
-            assign = ls
-        else:
-            assign = ls.strip('_') +'_' + a.strip('_')
+    for k, v in sorted(ass.items()):
+        
+        title =  (' '.join(k.split('_')[1:])).title()
+        text += f'\n# {title}\n\n'
 
+        _, d = v['dir'].split('/src/')
 
-        dir_ = ld / l / m / assign
+        text += f" {{{{ javaref('{v['level']}','{v['module']}','{d}')  }}}} \n\n"  
+        text += v['text']
 
-        ls = ls.strip('_')
+    text = html.unescape(text)
+    text = re.sub(r'\xa0', ' ', text)
+    text = re.sub(r'</?div.*>', '', text)
 
 
-
-        title = assign.replace('_', ' ').title()
-
-        dir_.mkdir(parents=True, exist_ok=True)
-
-
-
-        fm=f"# {title}"+"\n\n"
-
-
-        src = (f/'.web'/'index.md')
-
-        if src.exists():
-            text = fm+ src.read_text()
-        else:
-            text = fm
-
-        (dir_/'index.md').write_text(text)
-
-
-        d = {
-            'opath': str(f.relative_to(root)),
-            'level': l,
-            'module': m,
-            'lesson': ls,
-            'ossignment': a.strip('_'),
-            'assignment': assign,
-            'title': title,
-            'description': ''
-
-        }
-
-
-        (dir_/'_assignment.yaml').write_text(yaml.dump(d))
-
-        for e in f.iterdir():
-            if e.is_file() and e.suffix in ('.png','.gif','.jpg'):
-                shutil.copy(e, dir_/e.name)
+    return text
 
 @task
-def make_lesson_plan(ctx):
-
+def make_lesson_dirs(ctx, level, root):
 
     ld =  repo_root / 'lessons'
 
+    meta = compile_meta(level, root)
 
     lessons = {}
+
     lp = {
         'title': 'Java Levels',
         'description': 'All of the Java Levels',
@@ -152,36 +87,47 @@ def make_lesson_plan(ctx):
         'lessons': None
     }
 
-    for f in ld.glob('**/_assignment.yaml'):
 
-        dir_ = f.parent
-        d = yaml.safe_load(f.read_text())
-        m, l, a = d['module'], d['lesson'], d['assignment']
+    for mk, mv in sorted(meta.items()):
 
-        if not m in lessons:
-            lessons[m] =  {
-                'title': m,
+        if not mk in lessons:
+            lessons[mk] =  {
+                'title': mk,
                 'assignments':[]
             }
 
-        p = f.parent.relative_to(ld)
+        for lk, lv in sorted(mv.items()):
+            ltitle = (' '.join(lk.split('_')[1:])).title()
+            print (mk, ltitle, len(lv))
+
+            dir_ =  ld / mk / lk
 
 
-        lessons[m]['assignments'].append( str(p ))
+            dir_.mkdir(parents=True, exist_ok=True)
+            
+            #(dir_/'.meta').write_text(yaml.dump(meta))
 
-        lessons[m]['assignments'] = list(sorted(lessons[m]['assignments']))
+            text = make_text(lv)
+
+            (dir_/'index.md').write_text(text)
 
 
+            a = {
+                'level': level, 
+                'module': mk,
+                'lesson': lk, 
+                'title': ltitle,
+                'description': ''
+            }
 
+            (dir_/'_assignment.yaml').write_text(yaml.dump(a))
+
+
+            lessons[mk]['assignments'].append( str(dir_.relative_to(ld) ))
+            lessons[mk]['assignments'] = list(sorted(lessons[mk]['assignments']))
 
     lp['lessons'] = lessons
 
-    print(yaml.dump(lp))
-
-
- 
-
-
-
+    (ld / 'lesson-plan.yaml').write_text(yaml.safe_dump(lp))
 
 
