@@ -9,17 +9,7 @@ import html
 repo_root = Path(__file__).parent
 
 
-def walk_asgn(root):
-
-    root = Path(root)
-
-    for f in root.glob('**/.meta'):
-        yield f
-
-
-def compile_meta(level, root):
-
-    root = Path(root)
+def compile_meta(level, metas):
 
     ld =  repo_root / 'lessons'
 
@@ -29,10 +19,9 @@ def compile_meta(level, root):
 
     lessons = {}
 
-    for mf in walk_asgn(root):
-
-        meta = yaml.safe_load(mf.read_text())
-
+    for meta in metas:
+       
+        
         if meta['level'].lower() == level.lower():
 
             m, l, a = meta['module'], meta['lesson'], meta['assignment']
@@ -48,33 +37,49 @@ def compile_meta(level, root):
 
     return lessons
 
-def make_text(ass):
 
-    text = ''
+def indent_headings(t):
 
-    for k, v in sorted(ass.items()):
+    lines = []
+
+    for l in t.splitlines():
+        if l.startswith('#'):
+            l = "#"+l
+
+        lines.append(l)
+
+    return '\n'.join(lines)
+
+
+def make_text(lv):
+
+    
+    first = list(lv.values())[0]
+
+    if len(lv) == 1:
+        return first['text']
+
+    title = first['lesson'].replace('_',' ').title()
+
+    o = f"# {title}\n\n"
+
+    for ak, a in lv.items():
         
-        title =  (' '.join(k.split('_')[1:])).title()
-        text += f'\n# {title}\n\n'
+        o += indent_headings(a['text'])
 
-        _, d = v['dir'].split('/src/')
-
-        text += f" {{{{ javaref('{v['level']}','{v['module']}','{d}')  }}}} \n\n"  
-        text += v['text']
-
-    text = html.unescape(text)
-    text = re.sub(r'\xa0', ' ', text)
-    text = re.sub(r'</?div.*>', '', text)
-
-
-    return text
+    return o
 
 @task
-def make_lesson_dirs(ctx, level, root):
+def make_lessons(ctx, level, meta_file):
+
+
+    meta = yaml.safe_load(Path(meta_file).read_text())
+
+    meta = compile_meta(level, meta)
+
 
     ld =  repo_root / 'lessons'
 
-    meta = compile_meta(level, root)
 
     lessons = {}
 
